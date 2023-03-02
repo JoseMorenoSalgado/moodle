@@ -1,0 +1,26 @@
+// Installa mariadb 10.5 en ubuntu 20.04
+
+Actualizar repositorios
+sudo apt update && sudo apt upgrade
+
+# Instalar paquete oftware-properties-common
+sudo apt -y install software-properties-common
+
+#Importar la clave GPG del repositorio de Mariadb
+sudo apt-key adv --fetch-keys 'https://mariadb.org/mariadb_release_signing_key.asc'
+
+#Despues de importado la clave GPG, agregar el repositorio apt.
+sudo add-apt-repository 'deb [arch=amd64] http://mariadb.mirror.globo.tech/repo/10.5/ubuntu focal main'
+
+# Actualizar repositorios  e instalar maridb
+sudo apt update
+sudo apt install mariadb-server mariadb-client
+
+#Habilitar para que cada ves que inicie el server el servicio de mariadb taambien.
+systemctl enable mysql --now
+
+Revisar si los servicios estan activos.
+sudo systemctl status mysql 
+
+Verificar  la version instalada
+mysql --version
