@@ -1,0 +1,17 @@
+instalacion de Unonconv para Moodle en Rocky Linux.
+yum update
+
+romover paqueste de libreoffice 
+yum remove openoffice* libreoffice*
+
+
+
+
+install Unconv.
+yum install unoconv
+
+systemctl enable unoconv.service
+systemctl start unoconv.service
+
+Instalar ghostscript
+sudo yum -y install ghostscript
