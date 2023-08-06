@@ -1,0 +1,201 @@
+Comandos.
+Actualizar paquetes
+apt update
+apt upgrade.
+
+servidor web 
+apt install nginx
+
+clear: limpiar la pantalla
+mkdir: se utiliza para crear archivos en linux.
+cd  : Comando utilizado para entrar o salir de un fuchero o carpeta ejemplo cd /var
+cd.. regresar a una carpeta.
+ls : para enlistar o ver los archivos de una carpta o fichero.
+rm -rf: comando para eliminar un fichero.
+reboot: reinicar el servidor
+
+instalar php
+
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt install php8.0 php8.0-{fpm,common,mbstring,xmlrpc,soap,gd,xml,intl,mysql,cli,mcrypt,ldap,zip,curl}
+
+
+
+Cambie los siguientes datos.
+
+memory_limit = 256M
+
+upload_max_filesize = 64M
+
+post_max_size = 64M
+
+max_execution_time = 360
+
+max_input_time = 360
+
+cgi.fix_pathinfo = 0
+
+date.timezone = America/ManaguaSin salirse de este mismo archivo cambia lo siguiente
+Cambie el valor de (1000) max_input_vars = 1000 por (5000) quedando como lo siguiente.
+
+max_input_vars = 5000
+
+systemctl restar php8.0-fpm
+
+
+·················································································
+
+Instalar mariabd.
+
+
+apt install mariadb-server -y
+
+
+Revisar versión de base de dato.
+
+
+sudo mysql --version
+
+
+Instalar seguridad mariadb.
+
+mysql_secure_installation
+
+t1cd4m4n4gua
+Configuracion de seguridad mariadb.
+
+Enter current password for root (enter for none): ENTER
+
+Set root password? [Y/n] y
+
+Remove anonymous users? [Y/n] y
+
+Disallow root login remotely? [Y/n] y
+
+Remove test database and access to it? [Y/n] y
+
+Reload privilege tables now? [Y/n] y
+
+
+Configurar MariaDB.
+
+sudo nano /etc/mysql/mariadb.conf.d/50-server.cnf
+
+
+Agregar las siguientes líneas como se observa en la imagen.
+
+default_storage_engine = innodb
+
+innodb_file_per_table = 1
+
+innodb_file_format = Barracuda
+
+innodb_large_prefix = 1
+
+
+sudo systemctl restart mariadb
+
+sudo systemctl status mariadb
+··················································································
+
+Ingresar al servidor de mysql.
+sudo mysql -u root -p
+
+Ingresado los datos anteriores procederemos a crear nuestra base de dato.
+CREATE DATABASE CursoTic DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+Crear usuario y contraseña.
+CREATE USER 'CursoTic'@'localhost' IDENTIFIED BY 'MypasswordTaller2021';
+
+Asignar todos los privilegios de nuestro usuario creado a la base de dato. 
+GRANT ALL PRIVILEGES ON CursoTic.* TO 'CursoTic'@'localhost';
+
+ Para finalizar.
+FLUSH PRIVILEGES;
+
+exit
+······································································
+
+
+Descargar Moodle.
+
+wget https://download.moodle.org/download.php/direct/stable402/moodle-latest-402.tgz
+
+tar -zxvf mood..
+······································································
+
+
+Crear los directorios y mover la carpeta de Moodle descomprimida.
+
+mkdir -p /var/www/taller/data
+
+mv moodle /var/www/taller/web
+
+chown -R www-data:www-data /var/www/aula
+
+chmod -R 755 /var/www/aula
+
+Acceder al directorio siguiente y revisar nuestro archivo de Moodle que movimos.
+
+ cd /var/www/
+
+
+..................................................................................
+Configurar Nginx.
+Accediendo al directorio .conf de nginx.
+
+cd /etc/nginx/conf.d
+
+
+nano curso.elearningcloud.org.conf
+server {
+    listen 80;
+    server_name aula.elearninghacking.com;
+    root /var/www/moodles/web;
+    index index.php index.html index.htm;
+ 
+    location / {
+     try_files $uri $uri/ /index.php?$query_string;       
+    }
+ 
+    location /dataroot/ {
+     internal;
+     alias /var/www/moodles/data;
+    }
+ 
+    location ~ [^/]\.php(/|$) {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+ 
+} 
+systemctl retart nginx
+
+Instalar certificado de Seguridad SSL
+
+sudo apt install certbot python3-certbot-nginx
+certbot --nginx -d curso.elearningcloud.org
+
+
+
+
+
+
+backups base dedatos
+
+mysqldump -u root basededatoarespaldar > /var/www/nombrequeasignaremos.sql
+
+
+importar base de datos.
+mysql -p basededacreada < basededatoaimportar.sql
+
+································
+backups a otro server
+sudo rsync -av -e ssh data/ root@207.244.246.160:/home/gticapac/public_html
+
+sudo rsync -av -e ssh mail/ root@194.163.182.175:/home/ecloud/public_html
+
+php -v
