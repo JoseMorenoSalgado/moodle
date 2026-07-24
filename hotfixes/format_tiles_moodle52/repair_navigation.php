@@ -18,7 +18,6 @@
  *
  * Original files are copied to Moodledata before any modification.
  *
- * @package    core
  * @copyright  2026 Jose Erasmo Moreno Salgado - Elearning Cloud
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -73,6 +72,9 @@ $plugininfo = core_plugin_manager::instance()->get_plugin_info('format_tiles');
 if (!$plugininfo) {
     cli_error('Moodle does not recognise format_tiles as an installed plugin.');
 }
+
+cli_writeln('[MOODLE] ' . ($CFG->release ?? 'unknown release'));
+cli_writeln('[PLUGIN] format_tiles version ' . ($plugininfo->versiondisk ?? 'unknown'));
 
 $targets = [
     'amd/src/course_mod_modal.js',
@@ -147,7 +149,7 @@ set_config('usejavascriptnav', 1, 'format_tiles');
 cli_writeln('[CONFIG] format_tiles/usejavascriptnav = 1');
 
 if (!$keepuserpreferences) {
-    $deletedpreferences = $DB->delete_records('user_preferences', ['name' => 'format_tiles_stopjsnav']);
+    $DB->delete_records('user_preferences', ['name' => 'format_tiles_stopjsnav']);
     cli_writeln('[PREFERENCES] Cleared format_tiles_stopjsnav user preferences.');
 } else {
     cli_writeln('[PREFERENCES] Existing format_tiles_stopjsnav preferences preserved.');
